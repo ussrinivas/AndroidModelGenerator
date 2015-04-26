@@ -1,0 +1,25 @@
+package ${packageName}.models
+
+import org.joda.time.DateTime
+
+import com.github.tototoshi.slick.JodaSupport._
+
+import play.api.Play.current
+import play.api.db.slick.Config.driver.simple._
+import play.api.db.slick.DB
+import scala.slick.session.Session
+
+case class ${className}(${fieldObjects})
+
+object ${className} extends Table[${className}]("${modelName}") {
+${tableFields}
+  
+  def * = ${projection} <> (${className}.apply _, ${className}.unapply _)
+}
+
+object ${className}Actions {
+  def getAll = DB.withSession { implicit session: Session =>
+    Query(${className}).list
+  }
+}
+

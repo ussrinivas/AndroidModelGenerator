@@ -1,0 +1,20 @@
+package ${packageName}.provider
+
+import android.content.Context
+import android.provider.BaseColumns
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
+class ${databaseName}Database(context: Context, database: String, databaseVersion: Int) 
+  extends SQLiteOpenHelper(context, database, null, databaseVersion) {
+  
+${createTables}
+
+  override def onCreate(db: SQLiteDatabase): Unit = {
+${executeQuery}    
+  }
+
+  override def onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int): Unit = {
+  }
+
+}

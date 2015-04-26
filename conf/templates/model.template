@@ -1,0 +1,70 @@
+package ${packageName}.models
+
+import android.content.ContentValues
+import android.database.Cursor
+import android.content.ContentResolver
+import android.net.Uri
+
+import com.appsfactory.libraries.android.lib.BaseModel
+
+import ${packageName}.provider.${className}DetailsTable
+import ${packageName}.provider.${className}Colomns
+
+import ${packageName}.utils.AppConstants
+
+case class ${className}(${fieldObjects}) extends BaseModel
+  
+object ${className} {
+  val projection = ${className}DetailsTable.projection
+  
+  def queryAll[A](uri: Uri)(g: Cursor => A): A = AppConstants.query[A](projection)(uri: Uri)(g: Cursor => A)
+  
+  def getContentValues(${objectName}: ${className}): ContentValues = {
+    val values = new ContentValues
+
+${contentValues}
+
+    values
+  }
+  
+  private def convert(c: Cursor): ${className} = {
+    val ${objectName} = ${className}(${convertedValues})
+    ${objectName}._id = c.getInt(c.getColumnIndex("_id"))
+    ${objectName}  	
+  }
+  
+  private def convertTo${className}Objs(c: Cursor): List[${className}] = {
+    var ${listName}: List[${className}] = Nil
+
+    try {
+      if (c.moveToFirst()) {
+        ${listName} = List[${className}]()
+        do {
+          ${listName} ::= convert(c)
+        } while (c.moveToNext);
+      }
+    } catch {
+      case _: Throwable => {}
+    }
+
+    ${listName}
+  }
+  
+  def getAll: List[${className}] = {
+    val t: ContentResolver = null
+    val uri: Uri = null
+    queryAll[List[${className}]](uri)(convertTo${className}Objs)
+  }
+  
+  def save(${objectName}: ${className}): Unit = {
+    AppConstants.resolver.insert(${className}DetailsTable.CONTENT_URI, getContentValues(${objectName}));
+  }
+
+  def delete(${objectName}: ${className}): Unit = {
+    AppConstants.resolver.delete(${className}DetailsTable.CONTENT_URI, ${queryCondition}, null);
+  }
+
+  def update(${objectName}: ${className}): Unit = {
+    AppConstants.resolver.update(${className}DetailsTable.CONTENT_URI, getContentValues(${objectName}), ${queryCondition}, null);
+  }
+} 

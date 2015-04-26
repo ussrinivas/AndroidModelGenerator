@@ -1,0 +1,95 @@
+package ${packageName}.provider
+
+import java.util.Arrays
+
+import android.content.ContentProvider
+import android.content.ContentValues
+import android.content.UriMatcher
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.net.Uri
+
+import com.appsfactory.libraries.android.lib.CustomUriMatcher
+import com.appsfactory.libraries.android.lib.SelectionBuilder
+
+class ${databaseName}Provider extends ContentProvider {
+  
+  private var mOpenHelper: DiaryDatabase = null
+  private val sUriMatcher = buildUriMatcher
+
+  object UriValues {
+${uriNumbering}
+  }
+  
+  override def onCreate: Boolean = {
+    mOpenHelper = new ${databaseName}Database(getContext, "${databaseName}".toLowerCase, 1)
+    true
+  }
+
+  private def buildUriMatcher: CustomUriMatcher = {
+    val matcher = new CustomUriMatcher(UriMatcher.NO_MATCH)
+    val authority = ${databaseName}Contract.CONTENT_AUTHORITY
+
+${matcherAddUri}
+    matcher
+  }
+
+  override def getType(uri: Uri): String = {
+    val matcher = sUriMatcher.findMatch(uri)
+    matcher match {
+${caseContentType}    
+    }
+  }
+
+  override def delete(uri: Uri, selection: String, selectionArgs: Array[String]): Int = {    
+    val db = mOpenHelper.getWritableDatabase
+    val builder = buildSimpleSelection(uri)
+    val retVal = builder.where(selection, "").delete(db)
+    getContext.getContentResolver.notifyChange(uri, null)
+
+    retVal
+  }
+
+  override def update(uri: Uri, values: ContentValues, selection: String, selectionArgs: Array[String]): Int = {    
+    val db = mOpenHelper.getWritableDatabase
+    val builder = buildSimpleSelection(uri)
+    val retVal = builder.where(selection, "").update(db, values)
+    getContext.getContentResolver.notifyChange(uri, null)
+
+    retVal
+  }
+
+  override def query(uri: Uri, projection: Array[String], selection: String,
+      selectionArgs: Array[String], sortOrder: String): Cursor = {
+    
+    val db = mOpenHelper.getReadableDatabase
+
+    val builder = buildSimpleSelection(uri)
+    builder.where(selection, "").query(db, projection, sortOrder)
+  }
+
+  override def insert(uri: Uri, values: ContentValues): Uri = {
+    
+    val db = mOpenHelper.getWritableDatabase
+    val matcher = sUriMatcher.findMatch(uri)
+    matcher match { 
+${insertQuery}   
+    }
+  }
+
+  /**
+   * Build a simple {@link SelectionBuilder} to match the requested
+   * {@link Uri}. This is usually enough to support {@link #insert},
+   * {@link #update}, and {@link #delete} operations.
+   */
+  private def buildSimpleSelection(uri: Uri): SelectionBuilder = {
+    val builder = new SelectionBuilder
+    val matcher = sUriMatcher.findMatch(uri)
+
+    matcher match {
+${caseQuery}
+    }
+    builder    
+  }
+
+}

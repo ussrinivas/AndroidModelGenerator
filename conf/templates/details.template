@@ -1,0 +1,18 @@
+object ${modelName}DetailsTable extends BaseColumns {
+
+  val projection = Array(${projection})
+
+  val CONTENT_TYPE = "vnd.android.cursor.dir/${contentType}"
+  
+  val CONTENT_ITEM_TYPE = "vnd.android.cursor.item/${contentType}"
+  val CONTENT_URI = ${databaseName}Contract.BASE_CONTENT_URI.buildUpon().appendPath(${databaseName}Contract.PATH_${modelNameUpper}_DETAILS).build
+
+  def build${modelName}DetailsUri(${modelNameLower}Id: String): Uri = {
+    CONTENT_URI.buildUpon().appendPath(${modelNameLower}Id).build
+  }
+
+  def get${modelName}Id(uri: Uri): String = {
+    uri.getLastPathSegment
+  }
+
+}

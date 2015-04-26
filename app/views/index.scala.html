@@ -1,0 +1,36 @@
+@(message: String)
+
+@main(message){
+
+<div class="row">
+	<div id="models_div" class="span4">
+		<input type="text" name="package" id="package" placeholder="Package name" onkeyup="addPackge(this)" />
+		<input type="text" name="database" id="database" placeholder="Database name" onkeyup="addDatabase(this)"/>
+		<br />
+		<button type="submit" class="btn" onclick="generateJson()" style="margin-bottom: 5px;" >Generate</button>
+		<button type="submit" class="btn" onclick="addModels()" style="margin-bottom: 5px;" >Add a model</button>
+		<div id="div_0">
+			<input type="text" id="table_0"  name="table_0" placeholder="Model Name" onkeyup="modelContent(this, 0)" />
+			<a href="#" onclick="deleteModel(0)"><i class="icon-remove"></i></a>
+		</div>
+	</div>
+	<div class="tabbable span12">
+		<ul id="user_tabs" class="nav nav-tabs">
+
+        </ul>
+        <div id="model_tabs" class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
+
+        </div>
+	</div>
+</div>
+
+<div id="code_div" class="tabbable">
+	<ul id="code_tabs" class="nav nav-tabs">
+
+	</ul>
+	<div id="code_content_tabs" class="tab-content" style="padding-bottom: 9px; border-bottom: 1px solid #ddd;">
+
+	</div>
+</div>
+
+}

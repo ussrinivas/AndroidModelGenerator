@@ -1,0 +1,20 @@
+package ${packageName}.provider
+
+import android.net.Uri
+import android.provider.BaseColumns
+
+object ${contract}Contract {
+
+  val DEFAULT_SORT_ORDER = "modified AESC"
+
+  val CONTENT_AUTHORITY = "${packageName}.provider.${contract}"
+
+  val BASE_CONTENT_URI: Uri = Uri.parse("content://" + CONTENT_AUTHORITY)
+
+${pathVariables}}
+
+object Tables {
+${tableDetails}
+}
+${colomnTraits}
+${detailsTables}
